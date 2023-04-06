@@ -1,4 +1,5 @@
 import tkinter as tk
+from factors import conversion_factors
 
 root = tk.Tk()
 root.title("Konwerter jednostek")
@@ -28,10 +29,23 @@ def update_unit_menu(*args):
         unit_menu["menu"].delete(0, "end")
         unit_menu["menu"].add_command(label="Wybierz wielkość fizyczną", command=tk._setit(from_unit, "Wybierz wielkość fizyczną"))
 
+
+def convert():
+    value = float(entry.get())
+    from_unit_value = from_unit.get()
+    physical_quantity_value = from_quantity.get()
+    converted_values = {}
+    if physical_quantity_value in conversion_factors and from_unit_value in conversion_factors[physical_quantity_value]:
+        converted_values = conversion_factors[physical_quantity_value][from_unit_value]
+    converted_value = ""
+    for to_unit, factor in converted_values.items():
+        converted_value += f"{value * factor:.2f} {to_unit}\n"
+    result_entry.delete(0, tk.END)
+    result.set(converted_value)
+
 from_unit = tk.StringVar(root)
 
 from_quantity.trace("w", update_unit_menu)
-
 
 # Widget OptionMenu
 quantity_menu = tk.OptionMenu(root, from_quantity, *quantities)
@@ -43,8 +57,8 @@ unit_menu.grid(row=2, column=0, padx=10, pady=10)
 entry = tk.Entry(root)
 entry.grid(row=3, column=0, padx=10, pady=10)
 
-#convert_button = tk.Button(root, text="Konwertuj", command=convert)
-#convert_button.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
+convert_button = tk.Button(root, text="Konwertuj", command=convert)
+convert_button.grid(row=4, column=0, padx=10, pady=10)
 
 # Pole wyniku
 result = tk.StringVar()
