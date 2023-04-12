@@ -40,8 +40,10 @@ def convert():
     converted_value = ""
     for to_unit, factor in converted_values.items():
         converted_value += f"{value * factor:.2f} {to_unit}\n"
+        converted_value = converted_value.strip()
     result_entry.delete(0, tk.END)
     result.set(converted_value)
+    
 
 from_unit = tk.StringVar(root)
 
